@@ -1,0 +1,74 @@
+<div class="form-horizontal">
+    <div class="panel-group">
+
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title">
+                    Step 1: Add Samples
+                </h3>
+            </div>
+            
+            <div id="conditions">
+                <div class="panel-body">
+                    <div class="form-horizontal">
+                        <div class="form-group col-md-8" ng-class="{ 'has-error' : conditionRepExists() && addSampleClicked}">
+                            <div class="col-md-5">
+                                <label for="samplename">Sample Name</label>
+                                <select id="samplename" ng-model="vm.newSample" ng-options='sampleName for sampleName in vm.sampleNamesCurrent' class="form-control">
+                                    <!--<option value="">Select Sample</option>-->
+                                </select>
+                            </div>
+                            <div class="col-md-4">
+                                <label for="condition">Condition</label>
+                                <select id="condition" ng-model="vm.newSampleCondition" ng-options='condition for condition in vm.conditions' class="form-control">
+                                    <!--<option value="">Select Condition</option>-->
+                                </select>
+                            </div>
+                            <div class="col-md-2">
+                                <label for="condition">Replicate</label>
+                                <select ng-model="vm.newReplicate" ng-options="n for n in [] | range:1:100" class="form-control">
+
+                                </select>
+                            </div>
+                            <div class="col-md-1">
+                                <label>&nbsp;</label>
+                                <a href="" ng-click="addSample();" title="Add" > <i class="fa fa-plus fa-2x"></i></a>
+                            </div>
+                            <br>
+                            <div class="has-error">
+                                <div class="help-block"  ng-show="conditionRepExists() && addSampleClicked">
+                                    <p>Condition_Replicate already exists !</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group col-md-4">
+
+                            <div class="well">
+                            <table class="table table-hover table-striped">
+                                <thead>
+                                    <tr>
+                                        <th>Sample Name</th>
+                                        <th>New Name</th>
+                                        <th> </th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr ng-repeat="sample in vm.samplesOutput">
+                                        <td>{{sample.origSample}}</td>
+                                        <td>{{sample.newSample}}</td>
+                                        <td><button type="button" title="Delete" class="close" ng-click="deleteSample(sample);">
+                                                <i class="fa fa-times redfont"></i>
+                                            </button>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>

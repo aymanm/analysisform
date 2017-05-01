@@ -1,0 +1,100 @@
+<!-- index.html -->
+<!doctype html>
+
+<!-- ASSIGN OUR ANGULAR MODULE -->
+<html ng-app="templApp">
+
+<head>
+	<!-- META -->
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<!-- Optimize mobile viewport -->
+
+	<title>Template</title>
+
+	<!-- SCROLLS -->
+
+	<!-- <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css"> -->
+	<link rel="stylesheet" href="https://bootswatch.com/cerulean/bootstrap.css">
+	<!-- load bootstrap -->
+
+	<link rel="stylesheet" type="text/css" href="stylesheets/style.css">
+    <link rel="stylesheet" type="text/css" href="stylesheets/prism.css">
+	<link href="css/folder-tree.css" rel="stylesheet">
+	<link href="stylesheets/nga.min.css" rel="stylesheet">
+	<!-- OPTIONAL: default style -->
+	<link rel="stylesheet" type="text/css" href="stylesheets/ng-sortable.style.min.css">
+
+	<style>
+		html {
+			overflow-y: scroll;
+		}
+		
+		/* Set padding to keep content from hitting the edges */
+		.body-content { padding-left: 50px; padding-right: 50px; }
+		.BoxArea { padding:19px; margin: 5px; border: 3px solid; border-color:rgba(49, 126, 172, 0.65); border-radius:10px; background-color:#ffffff; opacity: 0.95;}
+		.BoxArea2 { padding:19px; margin: 5px; border: 3px solid; border-color:rgba(49, 126, 172, 0.65); border-radius:10px;}
+		.roundEdge { border-radius:10px; }
+		.clearBoth{ clear:both; }
+		.redfont {
+			color: #ff0000;
+			text-shadow: 2px 2px 2px #000;
+		}
+
+		.whitefont {
+			color: #fff;
+			text-shadow: 2px 2px 2px #000;
+		}
+
+	</style>
+
+	
+	
+
+</head>
+
+<body class="body-content" ng-controller="mainController  as vm">
+	
+	<div class="jumbotron text-center">
+		<h3>New analysis submit</h3>
+	</div>
+
+	<hr>
+	<div id="wizard-container">
+            
+		<div id="wizard-step-container">
+			<ul class="nav nav-pills nav-justified">
+			<li ng-repeat="step in vm.steps" ng-class="{'active':step.step == vm.currentStep}"><a ng-click="vm.gotoStep(step.step)" href="">{{step.step}}. {{step.name}}</a></li>
+			</ul>
+		</div>
+		<hr />
+		<form name="userForm" ng-submit="submitForm(userForm.$valid,vm.currentStep + 1)" novalidate>
+			<div id="wizard-content-container">
+				<ng-include src="vm.getStepTemplate()"></ng-include>
+			</div>
+			
+			<div id="wizard-navigation-container">
+				<div class="pull-right">
+				<span class="btn-group">
+					<button ng-disabled="vm.currentStep <= 1" class="btn btn-default" name="previous" type="button" ng-click="vm.gotoStep(vm.currentStep - 1)"><i class="fa fa-arrow-left"></i> Previous</button>
+					<button ng-show="vm.currentStep != vm.steps.length" ng-disabled="vm.currentStep >= vm.steps.length" class="btn btn-primary" name="next" type="submit">Next <i class="fa fa-arrow-right"></i></button>
+				</span>
+				 <button ng-show="vm.currentStep == vm.steps.length" class="btn btn-success" name="next" type="button" ng-click="vm.download()"> <i class="fa fa-download"></i> Download CSV</button> 
+				 <button class="btn btn-success" name="next" type="button" ng-click="vm.sendemail()"> <i class="fa fa-email"></i> Send Email</button> 
+				</div>
+			</div>
+			{{userForm.$valid}}
+		</form>
+	</div>
+
+
+
+
+
+
+
+
+
+</body>
+
+</html>

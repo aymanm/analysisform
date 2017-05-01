@@ -1,0 +1,60 @@
+<div class="form-horizontal">
+    <div class="panel-group">
+
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title">
+                    Step 1: Add Conditions
+                </h3>
+            </div>
+            
+            <div id="conditions">
+                <div class="panel-body">
+                    <div class="form-horizontal">
+                        <div class="form-group col-md-6" ng-class="{ 'has-error' : conditionExists() && addConditionClicked}">
+                                <div class="col-md-10">
+                                    <input placeholder="Condition name"  ng-model="vm.newCondition" type="text" class="form-control" name="conditionName">
+                                    <div class="has-error">
+                                        <div class="help-block"  ng-show="conditionExists() && addConditionClicked">
+                                            <p>Condition already exists!</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-2">
+                                    <button type="button" ng-click="addCondition();" title="Add" class="btn btn-primary btn-sm"><i class="fa fa-plus fa-2x"></i></button>
+                                </div>
+                        </div>
+                        <div class="form-group col-md-6">
+
+                            <div class="BoxArea2">
+                                <table class="table table-hover table-striped">
+                                    <thead>
+                                        <tr>
+                                            <th>Condition</th>
+                                            <th> </th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr ng-repeat="condition in vm.conditions">
+                                            <td>{{condition}}</td>
+                                            <td><button type="button" title="Delete" class="close" ng-click="deleteCondition(condition);">
+                                                    <i class="fa fa-times redfont"></i>
+                                                </button>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                                <div class="has-error">
+                                    <div class="help-block"  ng-show="vm.conditions.length < min">
+                                        <p>At least 1 condition must be added !</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
