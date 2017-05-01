@@ -61,7 +61,12 @@ app.controller("mainController",function ($scope, $http, $sce, $compile) {
         step: 4,
         name: "Add Samples",
         template: "step4samples.html"
-        },              
+        },
+        {
+        step: 5,
+        name: "Finish",
+        template: "step5finish.html"
+        },           
     ];
 
     //Functions
@@ -112,6 +117,7 @@ app.controller("mainController",function ($scope, $http, $sce, $compile) {
         $http.post('/api/sendemail', dataJson)
             .success(function(data) {
                 console.log(data);
+                vm.gotoStep(5)
             });
     }
 
@@ -120,7 +126,10 @@ app.controller("mainController",function ($scope, $http, $sce, $compile) {
         $scope.submitted = true;
         // check to make sure the form is completely valid
         if (isValid) {
-            vm.gotoStep(nextStep)
+            if(nextStep == 5)
+                vm.sendemail()
+            else
+                vm.gotoStep(nextStep)
         }
 
     };

@@ -37,12 +37,27 @@ router.post('/api/sendemail', function (req, res) {
     var to = req.body.formData.netid + '@nyu.edu'
     if(req.body.formData.ncbid != '')
       to += ',' + 'jira.cbi.nyuad@gmail.com'
+
+    var selectedTypes = req.body.formData.analType.map(function(type){
+      if(req.body.formData.analTypeSelected[type.id])
+        return type.name
+      return ''
+    })
+    
+    selectedTypes = selectedTypes.filter(v => v != '')
+    selectedTypes = selectedTypes.join(',')
+
+    var emailBody = 'Analysis Information: \n\n'
+    emailBody += 'NCS-ID: ' + req.body.formData.ncsid + '\n'
+    emailBody += 'NCB-ID: ' + req.body.formData.ncbid + '\n'
+    emailBody += 'Analysis Type: ' + selectedTypes + '\n'
+    emailBody += 'Notes: ' + req.body.formData.notes + '\n\n'
     // setup email data with unicode symbols
     var mailOptions = {
-        from: '"ayman yousif" <ay21@nyu.edu>', // sender address
+        from: req.body.formData.netid + '@nyu.edu', // sender address
         to: to, // list of receivers
         subject: subject, // Subject line
-        text: 'Hello world ?', // plain text body
+        text: emailBody, // plain text body
         attachments: [
         {   // utf-8 string as an attachment
             filename: 'samplesheet_edited.csv',
