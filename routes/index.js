@@ -37,7 +37,7 @@ router.post('/api/sendemail', function (req, res) {
     // setup email data with unicode symbols
     var mailOptions = {
         from: '"ayman yousif" <ay21@nyu.edu>', // sender address
-        to: 'ay21@nyu.edu', // list of receivers
+        to: req.body.formData.netid + '@nyu.edu', // list of receivers
         subject: subject, // Subject line
         text: 'Hello world ?', // plain text body
         attachments: [
