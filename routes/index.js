@@ -34,6 +34,9 @@ router.post('/api/sendemail', function (req, res) {
 
 
     var subject = req.body.formData.ncbid == '' ? 'Samplesheet' : req.body.formData.ncbid
+    var to = req.body.formData.netid + '@nyu.edu'
+    if(req.body.formData.ncbid != '')
+      to += ',' + 'jira.cbi.nyuad@gmail.com'
     // setup email data with unicode symbols
     var mailOptions = {
         from: '"ayman yousif" <ay21@nyu.edu>', // sender address
