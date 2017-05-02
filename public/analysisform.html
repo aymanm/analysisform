@@ -56,7 +56,7 @@
 <body class="body-content" ng-controller="mainController  as vm">
 	
 	<div class="jumbotron text-center">
-		<h3>New analysis submit</h3>
+		<h3>New analysis submission</h3>
 	</div>
 
 	<hr>
@@ -64,7 +64,7 @@
             
 		<div id="wizard-step-container">
 			<ul class="nav nav-pills nav-justified">
-			<li ng-repeat="step in vm.steps" ng-class="{'active':step.step == vm.currentStep}"><a ng-click="vm.gotoStep(step.step)" href="">{{step.step}}. {{step.name}}</a></li>
+			<li ng-repeat="step in vm.steps" ng-class="{'active':step.step == vm.currentStep}"><a href="">{{step.step}}. {{step.name}}</a></li>
 			</ul>
 		</div>
 		<hr />
@@ -80,10 +80,10 @@
 						<button ng-show="vm.currentStep != vm.steps.length" ng-disabled="vm.currentStep >= vm.steps.length" class="btn btn-primary" name="next" type="submit">Next <i class="fa fa-arrow-right"></i></button>
 					</span>
 					<button ng-show="vm.currentStep == vm.steps.length" class="btn btn-success" name="next" type="button" ng-click="vm.download()"> <i class="fa fa-download"></i> Download CSV</button> 
-					<button ng-show="vm.currentStep == vm.steps.length" class="btn btn-success" name="next" type="button" ng-click="vm.sendemail()"> <i class="fa fa-email"></i> Send Email</button> 
+					<!--<button ng-show="vm.currentStep == vm.steps.length" class="btn btn-success" name="next" type="button" ng-click="vm.sendemail()"> <i class="fa fa-email"></i> Send Email</button> -->
 				</div>
 			</div>
-			{{userForm.$valid}}
+			<!--{{userForm.$valid}}-->
 		</form>
 	</div>
 

@@ -2,6 +2,7 @@
     <div class="panel-group">
 
         <div class="panel panel-default">
+            
             <div class="panel-heading">
                 <h3 class="panel-title">
                     Step 1: Add Samples
@@ -40,29 +41,32 @@
                                     <p>Condition_Replicate already exists !</p>
                                 </div>
                             </div>
+                            <div class="col-md-12">
+                                <span us-spinner></span>
+                            </div>
                         </div>
                         <div class="form-group col-md-4">
 
                             <div class="well">
-                            <table class="table table-hover table-striped">
-                                <thead>
-                                    <tr>
-                                        <th>Sample Name</th>
-                                        <th>New Name</th>
-                                        <th> </th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr ng-repeat="sample in vm.samplesOutput">
-                                        <td>{{sample.origSample}}</td>
-                                        <td>{{sample.newSample}}</td>
-                                        <td><button type="button" title="Delete" class="close" ng-click="deleteSample(sample);">
-                                                <i class="fa fa-times redfont"></i>
-                                            </button>
-                                        </td>
-                                    </tr>
-                                </tbody>
-                            </table>
+                                <table class="table table-hover table-striped">
+                                    <thead>
+                                        <tr>
+                                            <th>Sample Name</th>
+                                            <th>New Name</th>
+                                            <th> </th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr ng-repeat="sample in vm.samplesOutput">
+                                            <td>{{sample.origSample}}</td>
+                                            <td>{{sample.newSample}}</td>
+                                            <td><button type="button" title="Delete" class="close" ng-click="deleteSample(sample);">
+                                                    <i class="fa fa-times redfont"></i>
+                                                </button>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
                             </div>
                         </div>
                     </div>
