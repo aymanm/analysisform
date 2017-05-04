@@ -11,65 +11,107 @@
             
             <div id="conditions">
                 <div class="panel-body">
-                    <div class="form-horizontal">
-                        <div class="form-group col-md-8" ng-class="{ 'has-error' : conditionRepExists() && addSampleClicked}">
-                            <div class="col-md-5">
-                                <label for="samplename">Sample Name</label>
-                                <select id="samplename" ng-model="vm.newSample" ng-options='sampleName for sampleName in vm.sampleNamesCurrent' class="form-control">
-                                    <!--<option value="">Select Sample</option>-->
-                                </select>
-                            </div>
+                        <div class="form-horizontal"ng-class="{ 'has-error' : (conditionRepExists() || sampleNameBlank() ) && addSampleClicked}">
                             <div class="col-md-4">
-                                <label for="condition">Condition</label>
-                                <select id="condition" ng-model="vm.newSampleCondition" ng-options='condition for condition in vm.conditions' class="form-control">
-                                    <!--<option value="">Select Condition</option>-->
-                                </select>
-                            </div>
-                            <div class="col-md-2">
-                                <label for="condition">Replicate</label>
-                                <select ng-model="vm.newReplicate" ng-options="n for n in [] | range:1:100" class="form-control">
+                                <div class="form-group col-md-12" >
+                                    <div class="col-md-10">
+                                        <label for="samplename">Sample Name</label>
+                                        <select id="samplename" ng-model="vm.newSample" ng-options='sampleName for sampleName in vm.sampleNamesCurrent' class="form-control">
+                                            <!--<option value="">Select Sample</option>-->
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="form-group col-md-12">
+                                    <div class="col-md-6" ng-show="vm.infoFormData.analTypeSelected[1]">
+                                        <label for="condition">Condition</label>
+                                        <select id="condition" ng-model="vm.newSampleCondition" ng-options='condition for condition in vm.conditions' class="form-control">
+                                            <!--<option value="">Select Condition</option>-->
+                                        </select>
+                                    </div>
+                                    <div class="col-md-6" ng-show="vm.infoFormData.analTypeSelected[2]">
+                                        <label for="condition">Time</label>
+                                        <select id="condition" ng-model="vm.newSampleTimefactor" ng-options='timefactor for timefactor in vm.timefactors' class="form-control">
+                                            <!--<option value="">Select Condition</option>-->
+                                        </select>
+                                    </div>
+                                    
+                                </div>
+                                <div class="form-group col-md-12">
+                                    <div class="col-md-6" ng-show="vm.infoFormData.analTypeSelected[3]">
+                                        <label for="factor">Factor</label>
+                                        <select id="factor" ng-model="vm.newSampleFactor" ng-options='factor for factor in vm.factors' class="form-control">
+                                            <!--<option value="">Select Condition</option>-->
+                                        </select>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label for="condition">Replicate</label>
+                                        <select ng-model="vm.newReplicate" ng-options="n for n in [] | range:1:100" class="form-control">
 
-                                </select>
-                            </div>
-                            <div class="col-md-1">
-                                <label>&nbsp;</label>
-                                <a href="" ng-click="addSample();" title="Add" > <i class="fa fa-plus fa-2x"></i></a>
-                            </div>
-                            <br>
-                            <div class="has-error">
-                                <div class="help-block"  ng-show="conditionRepExists() && addSampleClicked">
-                                    <p>Condition_Replicate already exists !</p>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <label>&nbsp;</label>
+                                        <a href="" ng-click="addSample();" title="Add" > <i class="fa fa-plus fa-2x"></i></a>
+                                    </div>
+                                    <div class="col-md-12">
+                                        <div class="has-error">
+                                            <div class="help-block"  ng-show="conditionRepExists() && addSampleClicked">
+                                                <p>Condition_Replicate already exists !</p>
+                                            </div>
+                                        </div>
+                                        <div class="has-error">
+                                            <div class="help-block"  ng-show="sampleNameBlank() && addSampleClicked">
+                                                <p>Fields cannot be blank !</p>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
-                            <div class="col-md-12">
-                                <span us-spinner></span>
-                            </div>
-                        </div>
-                        <div class="form-group col-md-4">
+                        <div class="col-md-8">
+                            <div class="form-group col-md-12">
 
-                            <div class="well">
-                                <table class="table table-hover table-striped">
-                                    <thead>
-                                        <tr>
-                                            <th>Sample Name</th>
-                                            <th>New Name</th>
-                                            <th> </th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr ng-repeat="sample in vm.samplesOutput">
-                                            <td>{{sample.origSample}}</td>
-                                            <td>{{sample.newSample}}</td>
-                                            <td><button type="button" title="Delete" class="close" ng-click="deleteSample(sample);">
-                                                    <i class="fa fa-times redfont"></i>
-                                                </button>
-                                            </td>
-                                        </tr>
-                                    </tbody>
-                                </table>
+                                <div class="BoxArea">
+                                    <table class="table table-hover table-striped">
+                                        <thead>
+                                            <tr>
+                                                <th>Sample Name</th>
+                                                <th ng-show="vm.infoFormData.analTypeSelected[1]">Condition</th>
+                                                <th ng-show="vm.infoFormData.analTypeSelected[2]">Time</th>
+                                                <th ng-show="vm.infoFormData.analTypeSelected[3]">Factor</th>
+                                                <th>Replicate</th>
+                                                <th>New Name</th>
+                                                <th> </th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr ng-repeat="sample in vm.samplesOutput | orderBy:sample.origSample">
+                                                <td>{{sample.origSample}}</td>
+                                                
+                                                <td ng-show="vm.infoFormData.analTypeSelected[1]">
+                                                    {{sample.condition}}
+                                                </td>
+                                                <td ng-show="vm.infoFormData.analTypeSelected[2]">
+                                                    {{sample.timefactor}}
+                                                </td>
+                                                <td ng-show="vm.infoFormData.analTypeSelected[3]">
+                                                    {{sample.factor}}
+                                                </td>
+                                                <td>{{sample.replicate}}</td>
+                                                <td>{{sample.newSample}}</td>
+                                                <td><button type="button" title="Delete" class="close" ng-click="deleteSample(sample);">
+                                                        <i class="fa fa-times redfont"></i>
+                                                    </button>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
                             </div>
+                            </div>
+                            <p class="col-md-12">
+                                <span us-spinner></span>
+                            </p>
                         </div>
-                    </div>
                 </div>
             </div>
 

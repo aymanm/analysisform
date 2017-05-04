@@ -1,5 +1,6 @@
 <div class="form-horizontal col-md-11 col-md-offset-1">
-    <div class="form-group">
+
+    <div class="form-group" ng-show="!vm.errorSendEmail">
         <p>
             Analysis submission completed successfully. An email has been sent to your netid email containing the information and the samples csv file.
         </p>
@@ -9,5 +10,18 @@
         <p>
             If you supplied a Jira NCB-ID, this information will also be saved in the jira ticket.
         </p>
+    </div>
+    <div class="form-group haserror" ng-show="vm.errorSendEmail">
+        <p>
+            There was an error sending the info to your email:
+        </p>
+        <div class="has-error">
+            <div class="help-block">
+                <p>{{vm.errorSendEmail}}</p>
+            </div>
+        </div>
+        <p>
+            You can also download the CSV file to your local computer.
+        <p>
     </div>
 </div>

@@ -60,15 +60,19 @@ router.post('/api/sendemail', function (req, res) {
         text: emailBody, // plain text body
         attachments: [
         {   // utf-8 string as an attachment
-            filename: 'samplesheet_edited.csv',
-            content: req.body.csvContent
+            filename: 'samples_renamed.csv',
+            content: req.body.renamedCsv
+        },
+        {   // utf-8 string as an attachment
+            filename: 'samples_design.csv',
+            content: req.body.designCsv
         }]
     };
 
     // send mail with defined transport object
     transporter.sendMail(mailOptions, (error, info) => {
         if (error) {
-            res.json(error);
+            res.status(400).send({errmsg:error.message});
             return console.log(error);
         }
         res.json({message:'Message '+ info.messageId + ' sent: '+ info.response});

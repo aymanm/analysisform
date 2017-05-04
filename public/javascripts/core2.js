@@ -1,5 +1,5 @@
 // public/core.js
-var app = angular.module('templApp', ['ui.sortable','ngMessages','ui.bootstrap','ngSanitize','angular-bind-html-compile','ngLoadingSpinner','ngAnimate']);
+var app = angular.module('templApp', ['ui.sortable','ngMessages','ui.bootstrap','ngSanitize','angular-bind-html-compile','ngLoadingSpinner','ngAnimate','mgcrea.ngStrap']);
 
 app.controller("mainController",function ($scope, $http, $sce, $compile) {
     $scope.min = 1;
@@ -28,9 +28,19 @@ app.controller("mainController",function ($scope, $http, $sce, $compile) {
 
     vm.newCondition = '';
     vm.conditions = [];
+    vm.newFactor = '';
+    vm.factors = [];
+
+    vm.newTimefactorHr = ''
+    // vm.newTimefactorMin = ''
+    // vm.newTimefactorSec = ''
+
+    vm.timefactors = []
 
     vm.newSample = '';
     vm.newSampleCondition = '';
+    vm.newSampleTimefactor = '';
+    vm.newSampleFactor = '';
     vm.newReplicate = ''
     vm.sampleNames = []
     vm.sampleNamesCurrent = []
@@ -99,25 +109,53 @@ app.controller("mainController",function ($scope, $http, $sce, $compile) {
     }
     
     vm.download = function() {
-        var samplesCsv = getSamplesCsv()
+        var renamedCsv = getRenamedCsv()
         downloadVarAsFile('samplesheet_edited',samplesCsv, '.csv')
     }
 
-    function getSamplesCsv(){
-        var samplesCsv = $scope.vm.samplesOutput.map(function(sampleObj){
+    function getRenamedCsv(){
+        var renamedCsv = $scope.vm.samplesOutput.map(function(sampleObj){
             return sampleObj.origSample + ',' + sampleObj.newSample
         })
-        return samplesCsv.join('\n')
+
+        return renamedCsv.join('\n')
+    }
+    function getDesignCsv(){
+        var designCsv = $scope.vm.samplesOutput.map(function(sampleObj){
+            var strLine =  sampleObj.newSample
+
+            if(sampleObj.condition)
+                strLine += ',' + sampleObj.condition
+            if(sampleObj.timefactor)
+                strLine += ',' + sampleObj.timefactor
+            if(sampleObj.factor)
+                strLine += ',' + sampleObj.factor
+
+            strLine += ',' + sampleObj.replicate
+
+            return strLine
+        })
+
+        return designCsv.join('\n')
     }
 
+    vm.errorSendEmail = null
     vm.sendemail = function() {
         var dataJson = { formData: vm.infoFormData, 
-                         csvContent: getSamplesCsv()}
+                         renamedCsv: getRenamedCsv(),
+                         designCsv: getDesignCsv()
+                        }
 
         $http.post('/api/sendemail', dataJson)
-            .success(function(data) {
-                console.log(data);
-                vm.gotoStep(5)
+            .then(
+                function() {
+                    console.log('success');
+                    vm.errorSendEmail = null
+                    vm.gotoStep(5)
+            },
+                function(response) {
+                    vm.errorSendEmail = response.data.errmsg
+                    vm.gotoStep(5)
             });
     }
 
@@ -134,6 +172,8 @@ app.controller("mainController",function ($scope, $http, $sce, $compile) {
 
     };
 
+    // Step 2 - Multifactorial conditions
+
     $scope.addConditionClicked = false;
 
     $scope.addCondition = function () {
@@ -146,14 +186,14 @@ app.controller("mainController",function ($scope, $http, $sce, $compile) {
         if (!newCondition) {
             return;
         }
-
-        // vm.conditions.unshift(newCondition)
         vm.conditions.push(newCondition)
         vm.newCondition = '';
         $scope.addConditionClicked = false;
     }
+
     $scope.deleteCondition = function(condition) {
-        vm.conditions = vm.conditions.filter(c => c != condition)
+        // vm.conditions = vm.conditions.filter(c => c != condition)
+        vm.conditions = vm.conditions.filter(function(conditionIn){return conditionIn != condition})
     }
 
     $scope.conditionExists = function(){
@@ -161,16 +201,108 @@ app.controller("mainController",function ($scope, $http, $sce, $compile) {
     }
 
     $scope.$watch('vm.conditions', function () {
-        if(vm.conditions.length < 1 && vm.currentStep == 2)
+        if(vm.conditions.length < 1 && vm.currentStep == 2 && vm.infoFormData.analTypeSelected[1])
             $scope.userForm.conditionName.$setValidity('count', false);
-        else if(vm.conditions.length > 0 && vm.currentStep == 2)
+        else if(vm.conditions.length > 0 && vm.currentStep == 2 && vm.infoFormData.analTypeSelected[1])
             $scope.userForm.conditionName.$setValidity('count', true);
     }, true);
 
     $scope.$watch('userForm.conditionName', function () {
-        if(vm.conditions.length < 1 && vm.currentStep == 2)
+        if(vm.conditions.length < 1 && vm.currentStep == 2 && vm.infoFormData.analTypeSelected[1])
             $scope.userForm.conditionName.$setValidity('count', false);
     }, true);
+
+
+    // Step 2 - Timeseries factors
+
+    $scope.addTimefactorClicked = false;
+
+    $scope.addTimefactor = function () {
+        $scope.addTimefactorClicked = true;
+
+        if ($scope.timefactorBlank())
+            return
+        if($scope.timefactorExists())
+            return
+
+        // var newTimefactor = vm.newTimefactorHr + '_' + vm.newTimefactorMin + '_' + vm.newTimefactorSec
+        var newTimefactor = vm.newTimefactorHr + 'Hrs'
+
+        vm.timefactors.push(newTimefactor)
+        vm.newTimefactorHr = '';
+        // vm.newTimefactorMin = '';
+        // vm.newTimefactorSec = '';
+        $scope.addTimefactorClicked = false;
+    }
+    $scope.deleteTimefactor = function(timefactor) {
+        // vm.timefactors = vm.timefactors.filter(c => c != timefactor)
+        vm.timefactors = vm.timefactors.filter(function(timefactorIn){return timefactorIn != timefactor})
+    }
+
+    $scope.timefactorExists = function(){
+        // var newTimefactor = vm.newTimefactorHr + '_' + vm.newTimefactorMin + '_' + vm.newTimefactorSec
+        var newTimefactor = vm.newTimefactorHr + 'Hrs'
+        return vm.timefactors.indexOf(newTimefactor) > -1
+    }
+
+    $scope.timefactorBlank = function(){
+        // return !vm.newTimefactorHr || !vm.newTimefactorMin || !vm.newTimefactorSec
+        return !vm.newTimefactorHr
+    }
+
+    $scope.$watch('vm.timefactors', function () {
+        if(vm.timefactors.length < 1 && vm.currentStep == 2 && vm.infoFormData.analTypeSelected[2])
+            $scope.userForm.newTimefactorHr.$setValidity('count', false);
+        else if(vm.timefactors.length > 0 && vm.currentStep == 2 && vm.infoFormData.analTypeSelected[2])
+            $scope.userForm.newTimefactorHr.$setValidity('count', true);
+    }, true);
+
+    $scope.$watch('userForm.newTimefactorHr', function () {
+        if(vm.timefactors.length < 1 && vm.currentStep == 2 && vm.infoFormData.analTypeSelected[2])
+            $scope.userForm.newTimefactorHr.$setValidity('count', false);
+    }, true);
+
+
+        // Step 2 - Standard DGE factors
+
+    $scope.addFactorClicked = false;
+
+    $scope.addFactor = function () {
+        $scope.addFactorClicked = true;
+        if($scope.factorExists())
+            return
+
+        var newFactor = vm.newFactor.trim()
+
+        if (!newFactor) {
+            return;
+        }
+        vm.factors.push(newFactor)
+        vm.newFactor = '';
+        $scope.addFactorClicked = false;
+    }
+
+    $scope.deleteFactor = function(factor) {
+        vm.factors = vm.factors.filter(function(factorIn){return factorIn != factor})
+    }
+
+    $scope.factorExists = function(){
+        return vm.factors.indexOf(vm.newFactor) > -1
+    }
+
+    $scope.$watch('vm.factors', function () {
+        if(vm.factors.length < 1 && vm.currentStep == 2 && vm.infoFormData.analTypeSelected[3])
+            $scope.userForm.factorName.$setValidity('count', false);
+        else if(vm.factors.length > 0 && vm.currentStep == 2 && vm.infoFormData.analTypeSelected[3])
+            $scope.userForm.factorName.$setValidity('count', true);
+    }, true);
+
+    $scope.$watch('userForm.factorName', function () {
+        if(vm.factors.length < 1 && vm.currentStep == 2 && vm.infoFormData.analTypeSelected[3])
+            $scope.userForm.factorName.$setValidity('count', false);
+    }, true);
+
+    // Step 4 
 
     $scope.addSampleClicked = false;
     $scope.addSample = function () {
@@ -179,43 +311,72 @@ app.controller("mainController",function ($scope, $http, $sce, $compile) {
 			var newSample = {
 				name: vm.newSample.trim(),
                 condition: vm.newSampleCondition,
+                timefactor: vm.newSampleTimefactor,
                 replicate: vm.newReplicate
 			};
+            
+            if($scope.sampleNameBlank())
+                return
 
-			if (!newSample.name) {
-				return;
-			}
-
-            var newName = newSample.condition + '_' +newSample.replicate
+            var newName = constructSampleName()// newSample.condition + '_' +newSample.replicate
 
             if($scope.conditionRepExists())
                 return
 
-            for(var i=0; i< vm.samplesOutput.length; i++)
-            {
-                if(vm.samplesOutput[i].newSample == newName)
-                    return;
-            }
+            // for(var i=0; i< vm.samplesOutput.length; i++)
+            // {
+            //     if(vm.samplesOutput[i].newSample == newName)
+            //         return;
+            // }
 
             //vm.samplesOutput.unshift({ origSample: newSample.name, newSample: newName})
-            vm.samplesOutput.push({ origSample: newSample.name, newSample: newName})
+            var sampleObj = { origSample: newSample.name, newSample: newName, replicate: newSample.replicate}
+            if(vm.newSampleCondition)
+                sampleObj['condition'] = vm.newSampleCondition
+            if(vm.newSampleTimefactor)
+                sampleObj['timefactor'] = vm.newSampleTimefactor
+            if(vm.newSampleFactor)
+                sampleObj['factor'] = vm.newSampleFactor
+
+            vm.samplesOutput.push(sampleObj)
             var indexToRemove = vm.sampleNamesCurrent.indexOf(vm.newSample.trim())
             vm.sampleNamesCurrent.splice(indexToRemove,1)
             vm.newSample = '';
             vm.newSampleCondition = ''
+            vm.newSampleTimefactor = ''
+            vm.newSampleFactor = ''
             vm.newReplicate = ''
 
             $scope.addSampleClicked = false;
     }
+
+    function constructSampleName()
+    {
+        var name = 'Sample_'
+        if(vm.newSampleCondition)
+            name += vm.newSampleCondition
+        if(vm.newSampleTimefactor)
+            name += vm.newSampleTimefactor
+        name += '_' + vm.newReplicate
+
+        return name
+    }
+
+    $scope.sampleNameBlank = function(){
+        return !vm.newSample.trim() || !vm.newReplicate || (!vm.newSampleCondition && vm.infoFormData.analTypeSelected[1])
+        || (!vm.newSampleTimefactor && vm.infoFormData.analTypeSelected[2])
+    }
+
     $scope.deleteSample = function(sample) {
-        vm.samplesOutput= vm.samplesOutput.filter(c => c != sample)
+        // vm.samplesOutput= vm.samplesOutput.filter(c => c != sample)
+        vm.samplesOutput = vm.samplesOutput.filter(function(sampleIn){return sampleIn != sample})
         vm.sampleNamesCurrent.unshift(sample.origSample)
     }
     $scope.conditionRepExists = function(){
         var conditionRepList = vm.samplesOutput.map(function(sample){
             return sample.newSample
         })
-        return conditionRepList.indexOf(vm.newSampleCondition + '_' + vm.newReplicate) > -1
+        return conditionRepList.indexOf(constructSampleName()) > -1
     }
 
 
@@ -338,6 +499,26 @@ app.directive('formRepeat', function () {
       }
     };
   });
+
+app.directive('onlyDigits', function(){
+   return {
+     require: 'ngModel',
+     link: function(scope, element, attrs, modelCtrl) {
+
+       modelCtrl.$parsers.push(function (inputValue) {
+
+         var transformedInput = inputValue ? inputValue.replace(/[^\d.-]/g,'') : '';
+
+         if (transformedInput!=inputValue) {
+           modelCtrl.$setViewValue(transformedInput);
+           modelCtrl.$render();
+         }         
+
+         return transformedInput;         
+       });
+     }
+   };
+});
                               
 
 function downloadVarAsFile(title, text, ext){
