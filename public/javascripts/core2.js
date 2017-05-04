@@ -83,7 +83,7 @@ app.controller("mainController",function ($scope, $http, $window,$sce, $compile)
     vm.gotoStep = function(newStep) {
         vm.currentStep = newStep;
         if(newStep > 1)
-            $window.scrollTo(0, angular.element(document.getElementById('userForm')).offsetTop);
+            $window.scrollTo(0, angular.element(document.getElementById('wizard-content-container')).offsetTop);
     }
     
     vm.getStepTemplate = function(){
