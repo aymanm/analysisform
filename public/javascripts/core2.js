@@ -1,7 +1,7 @@
 // public/core.js
 var app = angular.module('templApp', ['ui.sortable','ngMessages','ui.bootstrap','ngSanitize','angular-bind-html-compile','ngLoadingSpinner','ngAnimate','mgcrea.ngStrap']);
 
-app.controller("mainController",function ($scope, $http, $sce, $compile) {
+app.controller("mainController",function ($scope, $http, $window,$sce, $compile) {
     $scope.min = 1;
 
     var vm = this;
@@ -82,6 +82,8 @@ app.controller("mainController",function ($scope, $http, $sce, $compile) {
     //Functions
     vm.gotoStep = function(newStep) {
         vm.currentStep = newStep;
+        if(newStep > 1)
+            $window.scrollTo(0, angular.element(document.getElementById('userForm')).offsetTop);
     }
     
     vm.getStepTemplate = function(){

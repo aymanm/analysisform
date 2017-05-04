@@ -1,8 +1,4 @@
 extends layout
 
 block content
-  section
-    .container
-        if(templjson)
-          input#templjson(type='hidden', value='#{templjson}')
-        include ../public/analysisform.html
+  include ../public/analysisform.html

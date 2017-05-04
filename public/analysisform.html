@@ -54,21 +54,19 @@
 </head>
 
 <body class="body-content" ng-controller="mainController  as vm">
-	
-	<div class="jumbotron text-center">
-		<h3>New analysis submission</h3>
-	</div>
-
 	<hr>
+	<div class="jumbotron text-center">
+		<h2>New Analysis Submission Form</h2>
+	</div>
 	<div id="wizard-container">
             
 		<div id="wizard-step-container">
 			<ul class="nav nav-pills nav-justified">
-			<li ng-repeat="step in vm.steps" ng-class="{'active':step.step == vm.currentStep}"><a href="" ng-click="vm.gotoStep(step.step)">{{step.step}}. {{step.name}}</a></li>
+			<li ng-repeat="step in vm.steps" ng-class="{'active':step.step == vm.currentStep}"><a href="">{{step.step}}. {{step.name}}</a></li>
 			</ul>
 		</div>
 		<hr />
-		<form name="userForm" ng-submit="submitForm(userForm.$valid,vm.currentStep + 1)" novalidate>
+		<form id="userForm" name="userForm" ng-submit="submitForm(userForm.$valid,vm.currentStep + 1)" novalidate>
 			<div id="wizard-content-container">
 				<ng-include src="vm.getStepTemplate()"></ng-include>
 			</div>
@@ -83,10 +81,11 @@
 					<!--<button ng-show="vm.currentStep == vm.steps.length" class="btn btn-success" name="next" type="button" ng-click="vm.sendemail()"> <i class="fa fa-email"></i> Send Email</button> -->
 				</div>
 			</div>
-			{{userForm.$valid}}
+			<!--{{userForm.$valid}}-->
 		</form>
 	</div>
-
+	<br>
+	<hr>
 
 
 
