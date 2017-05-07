@@ -4,7 +4,7 @@
         <div class="panel panel-default">
             <div class="panel-heading">
                 <h3 class="panel-title">
-                    Step 1: Add Factors
+                    Add Factors/Conditions
                 </h3>
             </div>
             
@@ -12,15 +12,15 @@
                 <div class="panel-body">
                     <div class="form-horizontal" ng-show="vm.infoFormData.analTypeSelected[1]">
                         <div class="col-md-12">
-                            Add Multifactorial Conditions
+                            Add Multifactorial Factors
                             <hr>
                         </div>
                         <div class="form-group col-md-6" ng-class="{ 'has-error' : conditionExists() && addConditionClicked}">
                             <div class="col-md-10">
-                                <input placeholder="Condition name"  ng-model="vm.newCondition" type="text" class="form-control" name="conditionName">
+                                <input placeholder="Condition name" only-alphanumeric ng-model="vm.newCondition" type="text" class="form-control" name="conditionName">
                                 <div class="has-error">
                                     <div class="help-block"  ng-show="conditionExists() && addConditionClicked">
-                                        <p>Condition already exists!</p>
+                                        <p>Factor already exists!</p>
                                     </div>
                                 </div>
                             </div>
@@ -33,7 +33,7 @@
                                 <table class="table table-hover table-striped">
                                     <thead>
                                         <tr>
-                                            <th>Condition</th>
+                                            <th>Factor</th>
                                             <th> </th>
                                         </tr>
                                     </thead>
@@ -49,7 +49,7 @@
                                 </table>
                                 <div class="has-error">
                                     <div class="help-block"  ng-show="vm.conditions.length < min">
-                                        <p>At least 1 condition must be added !</p>
+                                        <p>At least 1 factor must be added !</p>
                                     </div>
                                 </div>
                             </div>
@@ -119,15 +119,15 @@
                     </div>
                     <div class="form-horizontal" ng-show="vm.infoFormData.analTypeSelected[3]">
                         <div class="col-md-12">
-                            Add Standard DGE Factors
+                            Add Standard DGE Conditions
                             <hr>
                         </div>
                         <div class="form-group col-md-6" ng-class="{ 'has-error' : factorExists() && addFactorClicked}">
                                 <div class="col-md-10">
-                                    <input placeholder="Factor name"  ng-model="vm.newFactor" type="text" class="form-control" name="factorName">
+                                    <input placeholder="Factor name" only-alphanumeric ng-model="vm.newFactor" type="text" class="form-control" name="factorName">
                                     <div class="has-error">
                                         <div class="help-block"  ng-show="factorExists() && addFactorClicked">
-                                            <p>Factor already exists!</p>
+                                            <p>Condition already exists!</p>
                                         </div>
                                     </div>
                                 </div>
@@ -140,7 +140,7 @@
                                 <table class="table table-hover table-striped">
                                     <thead>
                                         <tr>
-                                            <th>Factor</th>
+                                            <th>Condition</th>
                                             <th> </th>
                                         </tr>
                                     </thead>
@@ -156,7 +156,7 @@
                                 </table>
                                 <div class="has-error">
                                     <div class="help-block"  ng-show="vm.factors.length < min">
-                                        <p>At least 1 factor must be added !</p>
+                                        <p>At least 1 condition must be added !</p>
                                     </div>
                                 </div>
                             </div>

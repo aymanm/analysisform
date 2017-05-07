@@ -509,7 +509,27 @@ app.directive('onlyDigits', function(){
 
        modelCtrl.$parsers.push(function (inputValue) {
 
-         var transformedInput = inputValue ? inputValue.replace(/[^\d.-]/g,'') : '';
+         var transformedInput = inputValue ? inputValue.replace(/[^\d_]/g,'') : '';
+
+         if (transformedInput!=inputValue) {
+           modelCtrl.$setViewValue(transformedInput);
+           modelCtrl.$render();
+         }         
+
+         return transformedInput;         
+       });
+     }
+   };
+});
+
+app.directive('onlyAlphanumeric', function(){
+   return {
+     require: 'ngModel',
+     link: function(scope, element, attrs, modelCtrl) {
+
+       modelCtrl.$parsers.push(function (inputValue) {
+
+         var transformedInput = inputValue ? inputValue.replace(/[^a-zA-Z0-9_]/g,'') : '';
 
          if (transformedInput!=inputValue) {
            modelCtrl.$setViewValue(transformedInput);
