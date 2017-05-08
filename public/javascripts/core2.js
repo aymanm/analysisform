@@ -115,6 +115,22 @@ app.controller("mainController",function ($scope, $http, $window,$sce, $compile)
         downloadVarAsFile('samplesheet_edited',samplesCsv, '.csv')
     }
 
+    vm.downloadDeseq = function(){
+        var dataJson = { samples: vm.samplesOutput }
+        $http.post('/api/getdeseq', dataJson)
+            .then(
+                function(response) {
+                    console.log('success');
+                    // vm.errorSendEmail = null
+                    // vm.gotoStep(5)
+                    downloadVarAsFile('DESEQ2',response.data, '.R')
+            },
+                function(response) {
+                    vm.errorSendEmail = response.data.errmsg
+                    vm.gotoStep(5)
+            });
+    }
+
     function getRenamedCsv(){
         var renamedCsv = $scope.vm.samplesOutput.map(function(sampleObj){
             return sampleObj.origSample + ',' + sampleObj.newSample

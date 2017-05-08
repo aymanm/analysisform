@@ -78,7 +78,8 @@
 						<button ng-disabled="vm.currentStep <= 1" class="btn btn-default" name="previous" type="button" ng-click="vm.gotoStep(vm.currentStep - 1)"><i class="fa fa-arrow-left"></i> Previous</button>
 						<button ng-show="vm.currentStep != vm.steps.length" ng-disabled="vm.currentStep >= vm.steps.length" class="btn btn-primary" name="next" type="submit">Next <i class="fa fa-arrow-right"></i></button>
 					</span>
-					<button ng-show="vm.currentStep == vm.steps.length" class="btn btn-success" name="next" type="button" ng-click="vm.download()"> <i class="fa fa-download"></i> Download CSV</button> 
+					<button ng-show="vm.currentStep == vm.steps.length" class="btn btn-success" name="next" type="button" ng-click="vm.download()"> <i class="fa fa-download"></i> Download CSV</button>
+					<button ng-show="vm.currentStep == vm.steps.length" class="btn btn-success" name="next" type="button" ng-click="vm.downloadDeseq()"> <i class="fa fa-download"></i> Download DESEQ2.R</button>
 					<!--<button ng-show="vm.currentStep == vm.steps.length" class="btn btn-success" name="next" type="button" ng-click="vm.sendemail()"> <i class="fa fa-email"></i> Send Email</button> -->
 				</div>
 			</div>

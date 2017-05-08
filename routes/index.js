@@ -26,9 +26,53 @@ router.get('/api/smtptest', function (req, res) {
   });
 })
 
+var exec = require('child_process').exec;
+var fs = require('fs')
+var _ = require('underscore')
+
+router.post('/api/getdeseq', function (req, res) {
+  var designData = req.body.samples
+  var cond_rep = designData.map(function(sample){
+        var name = ''
+        if(sample.condition)
+            name += sample.condition
+        if(sample.timefactor)
+            name += sample.timefactor
+        
+        return {name: name, rep: sample.replicate}
+  })
+
+  var grouped = _.groupBy(cond_rep, function(name_rep){ return name_rep.name })
+  var conditions = [], lengths = []
+
+  for (var k in grouped){
+    if (grouped.hasOwnProperty(k)) {
+         conditions.push(k);
+         lengths.push(grouped[k].length)
+    }
+  }
+
+  conditions = conditions.join(',')
+  lengths = lengths.join(',')
+
+  var cmd = "cd routes && ./make_deseq2.pl "+conditions+ " " + lengths
+  // var cmd = "pwd"
+  exec(cmd, function (error, stdout, stderr) {
+      fs.readFile('./routes/DESEQ2.R','utf-8', function read(err, data) {
+        if (err) {
+            throw err;
+        }
+        exec("rm ./routes/DESEQ2.R", function(error1, stdout1, stderr1){
+            
+            res.json(data);
+        })
+        
+      });
+  })
+})
+
 router.post('/api/sendemail', function (req, res) {
     
-    var test = req.body
     var poolConfig = 'smtp://smtp.nyu.edu:25/?pool=true';
     var transporter = nodemailer.createTransport(poolConfig)
 
