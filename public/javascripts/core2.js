@@ -20,10 +20,12 @@ app.controller("mainController",function ($scope, $http, $window,$sce, $compile)
     }, {
         'name': 'Timeseries',
         'id': 2
-    }, {
-        'name': 'Standard DGE',
-        'id': 3
-    }];
+    }
+    // , {
+    //     'name': 'Standard DGE',
+    //     'id': 3
+    // }
+    ];
 
 
     vm.newCondition = '';

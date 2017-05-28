@@ -12,7 +12,7 @@
                 <div class="panel-body">
                     <div class="form-horizontal" ng-show="vm.infoFormData.analTypeSelected[1]">
                         <div class="col-md-12">
-                            Add Multifactorial Factors
+                            Add Multifactorial Conditions
                             <hr>
                         </div>
                         <div class="form-group col-md-6" ng-class="{ 'has-error' : conditionExists() && addConditionClicked}">
@@ -20,7 +20,7 @@
                                 <input placeholder="Condition name" only-alphanumeric ng-model="vm.newCondition" type="text" class="form-control" name="conditionName">
                                 <div class="has-error">
                                     <div class="help-block"  ng-show="conditionExists() && addConditionClicked">
-                                        <p>Factor already exists!</p>
+                                        <p>Condition already exists!</p>
                                     </div>
                                 </div>
                             </div>
@@ -33,7 +33,7 @@
                                 <table class="table table-hover table-striped">
                                     <thead>
                                         <tr>
-                                            <th>Factor</th>
+                                            <th>Condition</th>
                                             <th> </th>
                                         </tr>
                                     </thead>
@@ -49,7 +49,7 @@
                                 </table>
                                 <div class="has-error">
                                     <div class="help-block"  ng-show="vm.conditions.length < min">
-                                        <p>At least 1 factor must be added !</p>
+                                        <p>At least 1 condition must be added !</p>
                                     </div>
                                 </div>
                             </div>
